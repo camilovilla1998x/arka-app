@@ -3,13 +3,18 @@ package com.arka.arka_app.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arka.arka_app.dto.customer.CustomerRequestDTO;
+import com.arka.arka_app.dto.customer.CustomerResponseDTO;
 import com.arka.arka_app.model.mysql.Customer;
 import com.arka.arka_app.service.interfaces.CustomerService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,41 +24,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final ModelMapper modelMapper;
 
     //* GET /api/customers -> Listar todos los clientes
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
-        return ResponseEntity.ok(customerService.getAll());
+    public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers() {
+        List<Customer> customers = customerService.getAll();
+        List<CustomerResponseDTO> result = customers.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
 
     //* GET /api/customers/{id} -> Buscar cliente por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<CustomerResponseDTO> getCustomerById(@PathVariable Long id) {
         return customerService.getById(id)
+                .map(this::toResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     //* POST /api/customers -> Crear nuevo cliente
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.create(customer));
+    public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerRequestDTO requestDTO) {
+        Customer customer = toEntity(requestDTO); // Convertimos DTO → entidad
+        Customer created = customerService.create(customer);
+        return ResponseEntity.ok(toResponseDTO(created));
     }
 
     //* PUT /api/customers/{id} -> Actualizar cliente
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer newCustomerData) {
-        return customerService.update(id, newCustomerData)
+    public ResponseEntity<CustomerResponseDTO> updateCustomer(@PathVariable Long id,
+                                                              @Valid @RequestBody CustomerRequestDTO requestDTO) {
+        Customer updatedData = toEntity(requestDTO); // Convertimos DTO → entidad
+        return customerService.update(id, updatedData)
+                .map(this::toResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -68,19 +80,42 @@ public class CustomerController {
 
     //* GET /api/customers/search?name=camilo -> Buscar clientes por nombre
     @GetMapping("/search")
-    public ResponseEntity<List<Customer>> searchCustomersByName(@RequestParam String name) {
-        return ResponseEntity.ok(customerService.searchByName(name));
+    public ResponseEntity<List<CustomerResponseDTO>> searchCustomersByName(@RequestParam String name) {
+        List<Customer> customers = customerService.searchByName(name);
+        List<CustomerResponseDTO> result = customers.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
 
     //* GET /api/customers/sorted -> Listar todos los clientes ordenados alfabéticamente 
     @GetMapping("/sorted")
-    public ResponseEntity<List<Customer>> getCustomersSortedByName() {
-        return ResponseEntity.ok(customerService.getSortedByName());
+    public ResponseEntity<List<CustomerResponseDTO>> getCustomersSortedByName() {
+        List<Customer> customers = customerService.getSortedByName();
+        List<CustomerResponseDTO> result = customers.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
     
-
-
     
-    
+    //* -----------------------------------
+    //* Métodos de conversión (mapper)
+    //* -----------------------------------
+
+    //? Recorderis: ModelMapper es una librería que automáticamente convierte objetos entre clases con
+    //? campos similares, en este caso Customer -> CustomerResponseDTO && CustomerRequestDTO -> Customer
+    //? Haga de cuenta un semi-espejo
+    //? La idea es evitar que el controller y service no convierta manualmente objetos, separando las responsabilidades
+    //? Además, es más mantenible y fácil de testear
+
+    private CustomerResponseDTO toResponseDTO(Customer customer) {
+        return modelMapper.map(customer, CustomerResponseDTO.class);
+    }
+
+    // Convertimos DTO → entidad para guardar o actualizar
+    private Customer toEntity(CustomerRequestDTO dto) {
+        return modelMapper.map(dto, Customer.class);
+    }
 
 }
