@@ -3,23 +3,24 @@ package com.arka.arka_app.service.interfaces;
 import java.util.List;
 import java.util.Optional;
 
-import com.arka.arka_app.model.mysql.Customer;
+import com.arka.arka_app.dto.customer.CustomerRequestDTO;
+import com.arka.arka_app.dto.customer.CustomerResponseDTO;
 
 
 public interface CustomerService {
 
-    List<Customer> getAll();
+    List<CustomerResponseDTO> getAll();
 
-    Optional<Customer> getById(Long id);
+    Optional<CustomerResponseDTO> getById(Long id);
 
-    Customer create(Customer customer);
+    CustomerResponseDTO create(CustomerRequestDTO customer);
 
-    Optional<Customer> update(Long id, Customer newCustomerData);
+    Optional<CustomerResponseDTO> update(Long id, CustomerRequestDTO newCustomerData);
 
     boolean delete(Long id);
 
-    List<Customer> searchByName(String nameFragment);
+    List<CustomerResponseDTO> searchByName(String nameFragment);
 
-    List<Customer> getSortedByName();
+    List<CustomerResponseDTO> getSortedByName();
 
 }

@@ -21,6 +21,7 @@
 * MongoDB (para notificaciones)
 * Mockito + JUnit 5 (pruebas unitarias)
 * MockMvc (para pruebas de controladores - pendiente)
+* MapStruct (para mapeo limpio entre entidades y DTOs)
 
 ---
 
@@ -40,7 +41,7 @@ com.arka.arka_app
 |   |-- customer       # DTOs para Cliente
 |-- mapper            # MapStruct (mapeo entre entidad y DTO)
 |-- exception         # Manejo centralizado de errores
-|-- config            # Configuración adicional
+|-- config            # Configuración adicional (ya sin ModelMapper)
 |-- test              # Pruebas unitarias y de integración
 ```
 
@@ -62,9 +63,11 @@ com.arka.arka_app
 
 * Uso de DTOs para entrada (`CustomerRequestDTO`) y salida (`CustomerResponseDTO`)
 
-* Mapeo limpio con MapStruct
+* Mapeo limpio con MapStruct:
 
-* Validación de datos en DTOs (pendiente integrar)
+  * Configurado con `@Mapper(componentModel = "spring")`
+  * Métodos bidireccionales: entity <-> DTO
+  * Soporte para listas
 
 * Pruebas unitarias 100% cubiertas en `CustomerServiceTest`
 
