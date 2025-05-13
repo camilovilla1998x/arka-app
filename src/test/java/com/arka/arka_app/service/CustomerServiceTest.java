@@ -248,5 +248,70 @@ public class CustomerServiceTest {
         verify(customerRepository, never()).deleteById(any());
     }
 
+    @Test //* Método searchByName()
+    void shouldReturnCustomersMatchingName() {
+        String name = "Cam";
+
+        Customer c1 = Customer.builder()
+                            .id(1L)
+                            .name("Camilo")
+                            .email("camilo@example.com")
+                            .build();
+
+        Customer c2 = Customer.builder()
+                            .id(2L)
+                            .name("Camila")
+                            .email("camila@example.com")
+                            .build();
+
+        CustomerResponseDTO dto1 = new CustomerResponseDTO(1L, "Camilo", "camilo@example.com", null, null);
+        CustomerResponseDTO dto2 = new CustomerResponseDTO(2L, "Camila", "camila@example.com", null, null);
+
+        List<Customer> mockList = Arrays.asList(c1, c2);
+
+        when(customerRepository.findByNameContainingIgnoreCase(name)).thenReturn(mockList);
+        when(customerMapper.toResponseList(mockList)).thenReturn(Arrays.asList(dto1, dto2));
+
+        List<CustomerResponseDTO> result = customerService.searchByName(name);
+
+        assertThat(result).hasSize(2);
+        assertThat(result).containsExactly(dto1, dto2);
+
+        verify(customerRepository, times(1)).findByNameContainingIgnoreCase(name);
+    }
+
+    @Test //* Método getSortedByName()
+    void shouldReturnCustomersSortedByName() {
+        Customer c1 = Customer.builder()
+                            .id(1L)
+                            .name("Ana")
+                            .email("ana@example.com")
+                            .build();
+
+        Customer c2 = Customer.builder()
+                            .id(2L)
+                            .name("Zara")
+                            .email("zara@example.com")
+                            .build();
+
+        CustomerResponseDTO dto1 = new CustomerResponseDTO(1L, "Ana", "ana@example.com", null, null);
+        CustomerResponseDTO dto2 = new CustomerResponseDTO(2L, "Zara", "zara@example.com", null, null);
+
+        List<Customer> mockList = Arrays.asList(c1, c2);
+
+        when(customerRepository.findAllByOrderByNameAsc()).thenReturn(mockList);
+        when(customerMapper.toResponseList(mockList)).thenReturn(Arrays.asList(dto1, dto2));
+
+        List<CustomerResponseDTO> result = customerService.getSortedByName();
+
+        assertThat(result).hasSize(2);
+        assertThat(result).containsExactly(dto1, dto2);
+
+        verify(customerRepository, times(1)).findAllByOrderByNameAsc();
+    }
+
+
+
+
 
 }
