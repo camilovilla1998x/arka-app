@@ -16,19 +16,9 @@ public interface ProductMapper {
     ProductResponseDTO toResponseDTO(Product product);
 
     //* Convierte lista de entidades a lista de DTOs
-    List<ProductResponseDTO> toREsponseList(List<Product> products);
+    List<ProductResponseDTO> toResponseList(List<Product> products);
 
     //* Convierte DTO a entidad
     Product toEntity(ProductRequestDTO dto);
-
-    //* Conversión BigDecimal a Double
-    default Double map(BigDecimal value){
-        return value != null ? value.doubleValue() : null;
-    }
-
-    //* Conversión Double a BigDecimal
-     default BigDecimal map(Double value) {
-        return value != null ? BigDecimal.valueOf(value) : null;
-    }
     
 }
