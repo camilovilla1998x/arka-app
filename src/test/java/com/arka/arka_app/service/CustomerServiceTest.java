@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -43,6 +44,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método getAll()
+    @DisplayName("shouldReturnAllCustomers")
     void shouldReturnAllCustomers(){
         //? Preparo datos
         Customer c1 = Customer.builder()
@@ -81,6 +83,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método getById() solo si existe
+    @DisplayName("shouldReturnCustomerByIdWhenExists")
     void shouldReturnCustomerByIdWhenExists(){
 
         Long id = 1L;
@@ -103,6 +106,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método getById() que no existe
+    @DisplayName("shouldReturnEmptyWhenCustomerNotFound")
     void shouldReturnEmptyWhenCustomerNotFound() {
 
         //* Pruebo un id random
@@ -116,6 +120,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método create()
+    @DisplayName("shouldCreateCustomerSuccessfully")
     void shouldCreateCustomerSuccessfully() {
 
         Long id = 10L;
@@ -158,6 +163,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método update() si el cliente existe
+    @DisplayName("shouldUpdateCustomerWhenExists")
     void shouldUpdateCustomerWhenExists() {
 
         Long id = 1L;
@@ -198,6 +204,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método update() si el cliente NO existe
+    @DisplayName("shouldReturnNullWhenUpdatingNonExistingCustomer")
     void shouldReturnNullWhenUpdatingNonExistingCustomer() {
         
         Long id = 99L;
@@ -220,6 +227,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método delete() si el cliente existe
+    @DisplayName("shouldDeleteCustomerWhenExists")
     void shouldDeleteCustomerWhenExists() {
         
         Long id = 1L;
@@ -235,6 +243,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método delete() si el cliente NO existe
+    @DisplayName("shouldReturnFalseWhenDeletingNonExistingCustomer")
     void shouldReturnFalseWhenDeletingNonExistingCustomer() {
         
         Long id = 99L;
@@ -249,6 +258,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método searchByName()
+    @DisplayName("shouldReturnCustomersMatchingName")
     void shouldReturnCustomersMatchingName() {
         String name = "Cam";
 
@@ -281,6 +291,7 @@ public class CustomerServiceTest {
     }
 
     @Test //* Método getSortedByName()
+    @DisplayName("shouldReturnCustomersSortedByName")
     void shouldReturnCustomersSortedByName() {
         Customer c1 = Customer.builder()
                             .id(1L)

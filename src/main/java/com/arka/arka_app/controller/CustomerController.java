@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arka.arka_app.dto.customer.CustomerRequestDTO;
 import com.arka.arka_app.dto.customer.CustomerResponseDTO;
-import com.arka.arka_app.model.mysql.Customer;
 import com.arka.arka_app.service.interfaces.CustomerService;
 
 import jakarta.validation.Valid;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
