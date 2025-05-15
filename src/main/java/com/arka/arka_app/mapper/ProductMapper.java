@@ -1,6 +1,5 @@
 package com.arka.arka_app.mapper;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.mapstruct.Mapper;

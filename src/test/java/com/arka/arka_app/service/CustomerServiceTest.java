@@ -36,7 +36,7 @@ public class CustomerServiceTest {
     @BeforeEach //* Incializo el servicio con el mock */
     void setUp(){
         //* Creación del mock del repositorio
-        customerRepository = Mockito.mock(CustomerRepository.class); // 👈 ¡Esto faltaba!
+        customerRepository = Mockito.mock(CustomerRepository.class);
         customerMapper = Mockito.mock(CustomerMapper.class);
     
         //* Inyecto los mocks en el servicio
