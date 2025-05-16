@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,14 +45,22 @@ public class Product {
 
     private String brand;
 
-    private String category;
-
     @CreationTimestamp
     @Column(updatable = false) //evita que alguien actualice el campo createdAt manualmente
     private LocalDateTime createAt;
 
     @UpdateTimestamp
     private LocalDateTime updateAt;
+
+    //* Relación -> Muchos productos pueden pertenecer a una categoría.
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    //* Relación -> Muchos productos pueden tener un mismo proveedor
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
 
 }
