@@ -2,6 +2,7 @@ package com.arka.arka_app.mapper;
 
 import java.util.List;
 
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 
 import com.arka.arka_app.dto.customer.CustomerRequestDTO;
@@ -20,6 +21,7 @@ public interface CustomerMapper {
     List<CustomerResponseDTO> toResponseList(List<Customer> customers);
 
     //* Convierte DTO de entrada a entidad
+    @InheritInverseConfiguration(name = "toResponseDTO")
     Customer toEntity(CustomerRequestDTO dto);
 
 }

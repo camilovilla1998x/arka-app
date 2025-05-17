@@ -1,5 +1,6 @@
 package com.arka.arka_app.model.mysql;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,4 +41,6 @@ public class Cart {
     private Set<CartItem> items = new HashSet<>(); //Usamos Set para evitar elementos duplicados
     //En el carrito obviamente no debemos tener el mismo producto repetido varias veces (como dos CartItem con el mismo product_id), si el usuario agrega el mismo producto aumenta la cantidad.
 
+    //* Fecha en la que se actualizó por última vez el carrito
+    private LocalDateTime updatedAt;
 }
