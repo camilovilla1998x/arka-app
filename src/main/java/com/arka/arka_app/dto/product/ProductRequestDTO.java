@@ -2,6 +2,7 @@ package com.arka.arka_app.dto.product;
 
 import java.math.BigDecimal;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ public class ProductRequestDTO {
     private String description;
 
     @NotNull(message = "El precio es obligatorio")
-    @Min(value = 0, message = "El precio no puede ser negativo")
+    @DecimalMin(value = "0.0", inclusive = true, message = "El precio no puede ser negativo")
     private BigDecimal price;
 
     @NotNull(message = "El stock es obligatorio")
